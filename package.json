@@ -1,0 +1,10 @@
+{
+  "name": "@mhoc/aws-cdk-fargate-resources",
+  "version": "1.0.0",
+  "description": "a small helper library for typescript aws-cdk projects which assists in defining fargate container resources",
+  "license": "Unlicense",
+  "devDependencies": {
+    "@types/node": "16.11.7",
+    "typescript": "4.4.4"
+  }
+}
