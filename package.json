@@ -3,8 +3,13 @@
   "version": "1.0.0",
   "description": "a small helper library for typescript aws-cdk projects which assists in defining fargate container resources",
   "license": "Unlicense",
+  "scripts": {
+    "build": "./node_modules/.bin/tsc",
+    "test": "npm run build && ./node_modules/.bin/mocha *.spec.js"
+  },
   "devDependencies": {
     "@types/node": "16.11.7",
+    "mocha": "^9.1.3",
     "typescript": "4.4.4"
   }
 }

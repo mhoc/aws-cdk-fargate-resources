@@ -91,6 +91,12 @@ export class FargateResources {
   };
 
   constructor(cpuRaw: number, memoryRaw: number) {
+    if (cpuRaw <= 0) {
+      throw new Error("FargateResources instantiated with negative cpu value");
+    }
+    if (memoryRaw <= 0) {
+      throw new Error("FargateResources instantiated with negative memory value");
+    }
     this.cpu.all = cpuRaw;
     this.memory.all = memoryRaw;
   }
@@ -98,31 +104,38 @@ export class FargateResources {
 }
 
 export class FargateResourcePie {
+  private remaining: number;
 
   constructor(
     private readonly label: string, 
-    private value: number,
-  ) {}
+    private readonly total: number,
+  ) {
+    if (total < 0) {
+      throw new Error("FargateResourcePie instantiated with negative value");
+    }
+    this.remaining = total;
+  }
 
   public rest(): number {
-    this.value = 0;
-    return this.value;
+    const _remaining = this.remaining;
+    this.remaining = 0;
+    return _remaining;
   }
 
   public take(n: number): number {
     if (n < 1) {
-      const desired = Math.floor(this.value * n);
-      if (desired > this.value) {
-        throw new Error(`Requested ${this.label} proportion ${n} exceeds remaining ${this.label} available (${desired} > ${this.value}).`);
+      const desired = Math.floor(this.total * n);
+      if (desired > this.remaining) {
+        throw new Error(`Requested ${this.label} proportion ${n} exceeds remaining ${this.label} available (${desired} > ${this.remaining}).`);
       }
-      this.value -= desired;
+      this.remaining -= desired;
       return desired;
     }
     n = Math.floor(n);
-    if (n > this.value) {
-      throw new Error(`Requested ${this.label} value ${n} exceeds remaining ${this.label} available (${this.value}).`);
+    if (n > this.remaining) {
+      throw new Error(`Requested ${this.label} value ${n} exceeds remaining ${this.label} available (${this.remaining}).`);
     }
-    this.value -= n;
+    this.remaining -= n;
     return n;
   }
 
